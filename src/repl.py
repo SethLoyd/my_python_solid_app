@@ -1,15 +1,18 @@
 #Entry Point
 from multiprocessing import Value
+from src.services import book_analytics_service
 from src.services import generate_books
 from src.domain.book import Book
 from src.services.book_service import BookService
+from src.services.book_analytics_service import BookAnalyticsService
 from src.repositories.book_repository import BookRepository
 import requests
 
 class BookREPL:
-    def __init__(self, book_service):
+    def __init__(self, book_service, book_analytics_service):
         self.running = True
         self.book_service = book_service
+        self.book_analytics_service = book_analytics_service
 
     def start(self):
         print("Welcome to the book app! Type \'help\' for a list of commands!")
@@ -29,8 +32,14 @@ class BookREPL:
             self.find_book_by_name()
         elif cmd == 'getJoke':
             self.get_joke()
+        elif cmd == 'getAveragePrice':
+            self.get_average_price()
+        elif cmd == 'getTopBooks':
+            self.get_top_books()
+        elif cmd == 'getValueScores':
+            self.get_value_scores()
         elif cmd == 'help':
-            print('Available commands: addBook, getAllRecords, findByName, getJoke, help, exit')
+            print('Available commands: addBook, getAllRecords, findByName, getJoke, getAveragePrice, getTopBooks, getValueScores, help, exit')
         else:
             print('Please use a valid command!')
         
@@ -54,6 +63,21 @@ class BookREPL:
         books = self.book_service.find_book_by_name(query)
         print(books)
 
+    def get_average_price(self):
+        books = self.book_service.get_all_books()
+        avg_price = self.book_analytics_service.average_price(books)
+        print(avg_price)
+
+    def get_top_books(self):
+        books = self.book_service.get_all_books()
+        top_rated_books = self.book_analytics_service.top_rated(books)
+        print(top_rated_books)
+
+    def get_value_scores(self):
+        books = self.book_service.get_all_books()
+        value_scores = self.book_analytics_service.value_scores(books)
+        print(value_scores)
+
     def get_joke(self):
         try:
             url = 'https://api.chucknorris.io/jokes/random'
@@ -71,6 +95,7 @@ if __name__ == '__main__':
     generate_books()
     repo = BookRepository('books.json')
     book_svc = BookService(repo)
-    repl = BookREPL(book_svc)
+    book_analytics_svc = BookAnalyticsService()
+    repl = BookREPL(book_svc, book_analytics_svc)
     repl.start()
 
