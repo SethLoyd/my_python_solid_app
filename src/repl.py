@@ -1,8 +1,10 @@
 #Entry Point
-from services.book_generator_service import generate_books_json
-from domain.book import Book
-from services.book_service import BookService
-from repositories.book_repository import BookRepository
+from multiprocessing import Value
+from src.services import generate_books
+from src.domain.book import Book
+from src.services.book_service import BookService
+from src.repositories.book_repository import BookRepository
+import requests
 
 class BookREPL:
     def __init__(self, book_service):
@@ -25,8 +27,10 @@ class BookREPL:
             self.add_book()
         elif cmd == 'findByName':
             self.find_book_by_name()
+        elif cmd == 'getJoke':
+            self.get_joke()
         elif cmd == 'help':
-            print('Available commands: addBook, getAllRecords, findByName, help, exit')
+            print('Available commands: addBook, getAllRecords, findByName, getJoke, help, exit')
         else:
             print('Please use a valid command!')
         
@@ -50,8 +54,21 @@ class BookREPL:
         books = self.book_service.find_book_by_name(query)
         print(books)
 
+    def get_joke(self):
+        try:
+            url = 'https://api.chucknorris.io/jokes/random'
+            response = requests.get(url, timeout=5)
+            response.raise_for_status()
+            print(response.json()['value'])
+        except requests.exceptions.Timeout:
+            print('Request timed out.')
+        except requests.exceptions.HTTPError as e:
+            print(f'HTTP error: {e}')
+        except requests.exceptions.RequestException as e:
+            print(f'Something else went wrong: {e}')    
+
 if __name__ == '__main__':
-    generate_books_json()
+    generate_books()
     repo = BookRepository('books.json')
     book_svc = BookService(repo)
     repl = BookREPL(book_svc)

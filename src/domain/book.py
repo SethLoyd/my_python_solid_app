@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from optparse import Option
 from typing import Optional
 import uuid
 
