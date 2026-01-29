@@ -10,7 +10,7 @@ def generate_books_json(filename='books.json', count=500):
         'Non-Fiction',
         'Mystery',
         'Romance',
-        'Tecnology',
+        'Technology',
         'History'
     ]
 

@@ -15,3 +15,19 @@ class BookService:
         if not isinstance(query, str):
             raise TypeError('Expected a str, got something else.')
         return self.repo.find_book_by_name(query)
+    
+    def find_book_by_id(self, query:str) -> Book:
+        if not isinstance(query, str):
+            raise TypeError('Expected a str, got something else')
+        return self.repo.find_book_by_id(query)
+    
+    def delete_book(self, query:str) -> str:
+        if not isinstance(query, str):
+            raise TypeError('Expected a str, got something else.')
+        return self.repo.delete_book(query)
+    
+    def edit_book(self, book:Book) -> str:
+        if not isinstance(book, Book):
+            raise TypeError('Expected a book, got something else.')
+        return self.repo.edit_book(book)
+    

@@ -10,3 +10,14 @@ class BookRepositoryProtocol(Protocol):
     
     def find_book_by_name(self, query:str) -> list[Book]:
         ...
+    
+    def find_book_by_id(self, query:str) -> Book:
+        ...
+
+    def delete_book(self, query:str) -> str:
+        ...
+
+    def edit_book(self, book:Book) -> str:
+        ...
+
+    

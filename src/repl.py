@@ -2,6 +2,7 @@
 from multiprocessing import Value
 from src.services import book_analytics_service
 from src.services import generate_books
+from src.services.book_generator_bad_data_service import generate_books as generate_bad_books
 from src.domain.book import Book
 from src.services.book_service import BookService
 from src.services.book_analytics_service import BookAnalyticsService
@@ -30,6 +31,10 @@ class BookREPL:
             self.add_book()
         elif cmd == 'findByName':
             self.find_book_by_name()
+        elif cmd == 'deleteBook':
+            self.delete_book()
+        elif cmd == 'editBook':
+            self.edit_book()
         elif cmd == 'getJoke':
             self.get_joke()
         elif cmd == 'getAveragePrice':
@@ -38,8 +43,12 @@ class BookREPL:
             self.get_top_books()
         elif cmd == 'getValueScores':
             self.get_value_scores()
+        elif cmd == 'medianPriceByGenre':
+            self.median_price_by_genre()
+        elif cmd == 'mostPopularGenre':
+            self.most_popular_genre()
         elif cmd == 'help':
-            print('Available commands: addBook, getAllRecords, findByName, getJoke, getAveragePrice, getTopBooks, getValueScores, help, exit')
+            print('Available commands: addBook, getAllRecords, findByName, deleteBook, editBook, getJoke, getAveragePrice, getTopBooks, getValueScores, medianPriceByGenre, mostPopularGenre help, exit')
         else:
             print('Please use a valid command!')
         
@@ -56,7 +65,7 @@ class BookREPL:
             new_book_id = self.book_service.add_book(book)
             print(new_book_id)
         except Exception as e:
-            print('An unexpected error has occurred: {e}')
+            print(f'An unexpected error has occurred: {e}')
 
     def find_book_by_name(self):
         query = input('Please enter book name: ')
@@ -78,6 +87,34 @@ class BookREPL:
         value_scores = self.book_analytics_service.value_scores(books)
         print(value_scores)
 
+    def median_price_by_genre(self):
+        books = self.book_service.get_all_books()
+        median_price = self.book_analytics_service.median_price_by_genre(books)
+        print(median_price)
+    
+    def most_popular_genre(self):
+        most_popular_genre = self.book_analytics_service.most_popular_genre()
+        print(most_popular_genre)
+
+    def delete_book(self):
+        #may add a cancel
+        query = input('Enter a book ID to delete: ')
+        check = self.book_service.delete_book(query)
+        print(check)
+    
+    def edit_book(self):
+        try:
+            book_id = input('Enter Book by Id to edit: ')
+            title = input('Edit Title [enter nothing to keep]: ')
+            author = input('Author [enter nothing to keep]: ')
+            genre = input('Genre [enter nothing to keep]: ')
+            price = input('Price [enter nothing to keep]: ')
+            book = Book(book_id = book_id, title = title, author = author, genre=genre, price_usd=price)
+            confirm = self.book_service.edit_book(book)
+            print(confirm)
+        except Exception as e:
+            print(f'An unexpected error has occurred: {e}')
+
     def get_joke(self):
         try:
             url = 'https://api.chucknorris.io/jokes/random'
@@ -93,9 +130,9 @@ class BookREPL:
 
 if __name__ == '__main__':
     generate_books()
+    generate_bad_books()
     repo = BookRepository('books.json')
     book_svc = BookService(repo)
     book_analytics_svc = BookAnalyticsService()
     repl = BookREPL(book_svc, book_analytics_svc)
     repl.start()
-

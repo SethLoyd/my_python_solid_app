@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from src.domain.book import Book
 
 #Ground rules for numpy:
@@ -44,3 +45,13 @@ class BookAnalyticsService:
             book.book_id: float(score) #output of dict comprehension
             for book, score in zip(books, scores)
         }
+    
+    def median_price_by_genre(self, books:list[Book]) ->dict[str, float]:
+        #make list of books a dict to turn into a dataframe
+        #manipulate with pandas
+        df = pd.DataFrame(books)
+        median = df.groupby('genre')['price_usd'].median().round(2)
+        return(median)
+
+    def most_popular_genre(self):
+        pass

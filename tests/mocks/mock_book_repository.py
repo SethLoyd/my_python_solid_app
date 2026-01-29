@@ -9,3 +9,9 @@ class MockBookRepo:
     
     def find_book_by_name(self, query):
         return [Book(title="test", author="author")]
+    
+    def edit_book(self, book):
+        return book
+    
+    def delete_book(self, query):
+        return []
