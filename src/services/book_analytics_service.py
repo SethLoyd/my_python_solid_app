@@ -53,5 +53,8 @@ class BookAnalyticsService:
         median = df.groupby('genre')['price_usd'].median().round(2)
         return(median)
 
-    def most_popular_genre(self):
-        pass
+    def most_popular_genre(self, books:list[Book]) ->dict[str, float]:
+        #doing this by highest sold
+        df = pd.DataFrame(books)
+        most_popular = df.groupby('genre')['sales_millions'].sum().round(2).idxmax()
+        return most_popular

@@ -93,7 +93,8 @@ class BookREPL:
         print(median_price)
     
     def most_popular_genre(self):
-        most_popular_genre = self.book_analytics_service.most_popular_genre()
+        books = self.book_service.get_all_books()
+        most_popular_genre = self.book_analytics_service.most_popular_genre(books)
         print(most_popular_genre)
 
     def delete_book(self):
