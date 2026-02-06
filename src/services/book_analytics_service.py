@@ -5,7 +5,7 @@ from src.domain.book import Book
 #Ground rules for numpy:
 #1. keep numpy in the service layer ONLY
 #   if you see numpy imports anywhere else this is a design smell
-#2. notic ehow methods take in books and return normal datatypes NOT ndarrays
+#2. notice how methods take in books and return normal datatypes NOT ndarrays
 
 class BookAnalyticsService:
 

@@ -1,3 +1,4 @@
+from src.services import book_generator_bad_data_service
 from src.repositories.book_repository_protocol import BookRepositoryProtocol
 from src.domain.book import Book
 
@@ -31,3 +32,8 @@ class BookService:
             raise TypeError('Expected a book, got something else.')
         return self.repo.edit_book(book)
     
+    def check_in_book(self, book_id:str) -> str:
+        return self.repo.check_in(book_id)
+    
+    def check_out_book(self, book_id:str) -> str:
+        return self.repo.check_out(book_id)

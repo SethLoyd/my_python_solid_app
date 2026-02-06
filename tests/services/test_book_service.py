@@ -19,7 +19,6 @@ def test_find_book_by_name_negative():
     assert str(e.value) == 'Expected a str, got something else.'
 
 def test_edit_book_negative():
-    #Fix this maybe make a pos test instead
     id = 3
     repo = MockBookRepo()
     svc = book_service.BookService(repo)
@@ -29,7 +28,6 @@ def test_edit_book_negative():
 
 
 def test_delete_book_negative():
-    #Finish this
     repo = MockBookRepo()
     svc = book_service.BookService(repo)
     id = 1

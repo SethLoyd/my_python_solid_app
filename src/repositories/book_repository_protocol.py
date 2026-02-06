@@ -20,4 +20,9 @@ class BookRepositoryProtocol(Protocol):
     def edit_book(self, book:Book) -> str:
         ...
 
+    def check_in(self, book_id:str) -> str:
+        ...
+    
+    def check_out(self, book_id:str) -> str:
+        ...
     

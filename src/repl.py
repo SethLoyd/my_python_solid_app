@@ -47,8 +47,12 @@ class BookREPL:
             self.median_price_by_genre()
         elif cmd == 'mostPopularGenre':
             self.most_popular_genre()
+        elif cmd == 'checkInBook':
+            self.check_in_book()
+        elif cmd == 'checkOutBook':
+            self.check_out_book()
         elif cmd == 'help':
-            print('Available commands: addBook, getAllRecords, findByName, deleteBook, editBook, getJoke, getAveragePrice, getTopBooks, getValueScores, medianPriceByGenre, mostPopularGenre help, exit')
+            print('Available commands: addBook, getAllRecords, findByName, deleteBook, editBook, checkInBook, checkOutBook, getJoke, getAveragePrice, getTopBooks, getValueScores, medianPriceByGenre, mostPopularGenre, help, exit')
         else:
             print('Please use a valid command!')
         
@@ -116,7 +120,16 @@ class BookREPL:
         except Exception as e:
             print(f'An unexpected error has occurred: {e}')
 
+    def check_in_book(self):
+        book_id = input('Enter Book Id to check in: ')
+        print(self.book_service.check_in_book(book_id))
+    
+    def check_out_book(self):
+        book_id = input('Enter Book Id to check out: ')
+        print(self.book_service.check_out_book(book_id))
+
     def get_joke(self):
+        #Possibly change to make it not have implementation in repl
         try:
             url = 'https://api.chucknorris.io/jokes/random'
             response = requests.get(url, timeout=5)
